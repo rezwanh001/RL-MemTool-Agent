@@ -13,14 +13,6 @@ from rl.env import RLEnv
 from agent.policy import LMPolicy
 
 
-def load_records(path):
-    recs = []
-    with open(path, "r") as f:
-        for line in f:
-            recs.append(json.loads(line))
-    return recs
-
-
 def main(cfg_path="configs/train.yaml"):
     with open(cfg_path) as f:
         cfg = yaml.safe_load(f)
@@ -61,8 +53,20 @@ def main(cfg_path="configs/train.yaml"):
     policy.model = base_model
     policy.tok = tok
 
-    # Load training data
-    train_recs = load_records("data/processed/hotpot_train.json")
+    # Load and process training data
+    ds = load_dataset(cfg["dataset_name"], cfg["dataset_config"])
+    def _map(example):
+        context_text = ""
+        for title, sents in zip(example["context"]["title"], example["context"]["sentences"]):
+            context_text += f"{title}: {' '.join(sents)} "
+        # Truncate context to avoid excessively long sequences
+        return {
+            "id": example["id"],
+            "question": example["question"],
+            "answer": example["answer"],
+            "context": context_text.strip()[:cfg.get("max_context_len", 4096)]
+        }
+    train_recs = ds["train"].map(_map, remove_columns=ds["train"].column_names)
 
     # PPO config (removed model_name)
     ppo_cfg = PPOConfig(
