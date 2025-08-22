@@ -1,3 +1,4 @@
+# agent/policy.py
 """
 Wraps the HF LM to produce next-step text given system+memory+user.
 Also provides a simple action decoder that detects TOOL JSON.

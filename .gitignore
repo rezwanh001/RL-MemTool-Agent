@@ -1,5 +1,11 @@
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+#env
+.venv/
 #launch.json folder
 .vscode/
 #Cache folder
@@ -20,3 +26,7 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+#data
+data/processed/
+data/prepared/
+data/hotpot_distractor/

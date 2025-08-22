@@ -1,3 +1,4 @@
+# baselines/vanilla_llm.py
 """
 No tools, no memory manager. Direct answer generation baseline.
 """

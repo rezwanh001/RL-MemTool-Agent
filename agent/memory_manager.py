@@ -1,3 +1,4 @@
+# agent/memory_manager.py
 """
 MemoryManager implements a fixed-token memory with priority eviction.
 

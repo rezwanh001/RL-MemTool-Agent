@@ -1,3 +1,4 @@
+# agent/tools.py
 """
 Implements simple tools:
 - WebSearchTool: stub uses Wikipedia REST (or your own function) to keep it keyless by default.
