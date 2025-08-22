@@ -1,0 +1,41 @@
+seed: 123
+model_name: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+output_dir: outputs/tinyllama-hotpot-ppo
+use_qlora: true
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.1
+bf16: false
+fp16: true
+
+max_seq_len: 4096
+max_response_len: 512
+train_batch_size: 16
+mini_batch_size: 4
+gradient_accumulation_steps: 1
+learning_rate: 5e-6
+ppo_epochs: 3
+target_kl: 0.1
+
+dataset_name: hotpot_qa
+dataset_config: distractor
+train_split: train[:2%]   # start small; scale up after prototype
+eval_split: validation[:2%]
+
+# Reward coefficients
+rewards:
+  em_weight: 1.0
+  f1_weight: 0.5
+  tool_use_penalty: 0.03       # penalize each tool call
+  long_think_penalty: 0.01     # penalize excessive internal tokens
+  hallucination_guard_weight: 0.5
+
+memory:
+  budget_tokens: 2048
+  eviction: priority    # priority|fifo
+  priority_keys: ["evidence", "final_plan", "subanswer"]
+
+tools:
+  enable_web_search: true
+  enable_retrieval: true
+  enable_calculator: false
